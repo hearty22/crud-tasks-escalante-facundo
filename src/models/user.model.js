@@ -21,5 +21,6 @@ export const user_model =  sequelize.define(
             type: DataTypes.STRING(100),
             allowNull: false
         }
-    }
+
+    },{createdAt: false, updatedAt: false}
 )
