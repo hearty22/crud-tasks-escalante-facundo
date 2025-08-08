@@ -29,9 +29,15 @@ export const Showuser = async (req, res)=>{
 };
 export const createUser = async (req, res)=>{
     try {
-        
+        const {name, password, email} = req.body;
+        if (!name || !password || !email){return res.status(400).json({message:"campos obligatorios no rellenados: name, password, email"})}
+        const emailexist = await user_model.findOne({where:{email}});
+        if (emailexist){return res.status(400).json({message:"el gmail ingresado ya está asociado a la pagina"})};
+        const newuser = new user_model({name, password, email});
+        await newuser.save();
+        res.status(201).json(newuser);
     } catch (error) {
-        
+        res.status(500).json({error:"error interno al crear el usuario"});
     }
 };
 
