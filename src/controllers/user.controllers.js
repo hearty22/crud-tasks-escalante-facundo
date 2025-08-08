@@ -40,4 +40,19 @@ export const createUser = async (req, res)=>{
         res.status(500).json({error:"error interno al crear el usuario"});
     }
 };
+export const updateUser = async (req, res)=>{
+    try {
+        const {name, email, password} = req.body;
+        const user = await user_model.findByPk(req.params);
+        if(!user){return res.status(400).json({message:"el usuario que desea actualizar no existe"})};
+        const existingemail = await languageModel.findOne({where:{email, id:{[Op.ne]:req.params.id}}});
+        if(existingemail){return res.status(400).json({message:" el email ingresado ya existe"})};
+        await user.update(req.body);
+        res.status(200).json(user);
+
+
+    } catch (error) {
+        res.status(500).json({error:"error interno al actualizar el usuario"})
+    }
+}
 
