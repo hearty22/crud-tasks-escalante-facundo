@@ -43,7 +43,7 @@ export const createUser = async (req, res)=>{
 export const updateUser = async (req, res)=>{
     try {
         const {name, email , password} = req.body;
-        if (!name && !password && !email){return res.status(400).json("la solicitud debe tener rellenada almenos un campo")};
+        if (!name && !password && !email){return res.status(400).json({message:"la solicitud debe tener rellenada al menos un campo"})};
         const user = await user_model.findByPk(req.params.id);
         if(!user){return res.status(400).json({message:"el usuario que desea actualizar no existe"})};
         
@@ -54,5 +54,17 @@ export const updateUser = async (req, res)=>{
     } catch (error) {
         res.status(500).json({error:"error interno al actualizar el usuario"})
     }
-}
+};
+export const delUser = async (req, res)=>{
+    try {
+        const user = await user_model.findByPk(req.params.id);
+        if(!user){return res.status(404).json({message:"el usuario que desea eliminar no existe"})};
+        const {name, password, email} = user;
 
+        await user.destroy();
+        res.status(200).json({message:`usuario eliminado con exito: ${name}, ${password}, ${email}`});
+    } catch (error) {
+        res.status(500).json({error:"error interno al eliminar al usuario"})
+
+    }
+};
