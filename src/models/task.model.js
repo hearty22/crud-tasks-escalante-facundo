@@ -22,6 +22,6 @@ export const task_model = sequelize.define("task",
             type: DataTypes.BOOLEAN,
             defaultValue: false
         }
-    }
+    },{createdAt:false, updatedAt:false}
 );
 
