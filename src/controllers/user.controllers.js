@@ -46,8 +46,7 @@ export const updateUser = async (req, res)=>{
         if (!name && !password && !email){return res.status(400).json({message:"la solicitud debe tener rellenada al menos un campo"})};
         const user = await user_model.findByPk(req.params.id);
         if(!user){return res.status(400).json({message:"el usuario que desea actualizar no existe"})};
-        
-        const existingemail = await user_model.findOne({where:{email, id: {[Op.ne]:req.params.id}}});
+        const existingemail = await user_model.findOne({where:{email, id: {[Op.ne] :  req.params.id}}});
         if(existingemail){return res.status(400).json({message:" el email ingresado ya existe"})};
         await user.update({name, email, password});
         res.status(200).json(user);

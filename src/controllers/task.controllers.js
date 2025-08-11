@@ -16,12 +16,6 @@ export const Showtasks = async (req, res)=>{
         res.status(500).json({error: "error al obtener las tareas"});
     };
 };
-
-
-
-
-
-
 export const Showtask = async (req, res)=>{
     try {
         const task = await task_model.findByPk(req.params.id);
@@ -35,10 +29,6 @@ export const Showtask = async (req, res)=>{
         res.status(500).json({error: "error interno al obtener al usuario"})
     }
 };
-
-
-
-
 export const createTask = async (req, res)=>{
     try {
         const {title, description, isComplete} = req.body;
