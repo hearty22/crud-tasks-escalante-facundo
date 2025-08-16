@@ -1,3 +1,4 @@
+import { task_model } from "../models/task.model.js";
 import { user_model } from "../models/user.model.js";
 import { Op } from "sequelize";
 
@@ -9,15 +10,26 @@ import { Op } from "sequelize";
 
 export const Showusers = async (req, res)=>{
     try {
-        const users = await user_model.findAll();
+        const users = await user_model.findAll({include:{model: task_model,
+            attributes:{exclude:["user_id"]}
+        }});
         res.status(200).json(users);
     } catch (error) {
         res.status(500).json({error: "error al obtener a los usuarios"});
     };
 };
+
+
 export const Showuser = async (req, res)=>{
     try {
-        const user = await user_model.findByPk(req.params.id);
+        const user = await user_model.findByPk(req.params.id,
+            {
+                include:{model: task_model,
+                    attributes:{
+                        exclude: ["user_id"]}
+                }
+            }
+        );
         if (!user){
             return res.status(404).json({message: "usuario no encontrado"})
         };
@@ -27,6 +39,7 @@ export const Showuser = async (req, res)=>{
         res.status(500).json({error: "error interno al obtener al usuario"})
     }
 };
+
 export const createUser = async (req, res)=>{
     try {
         const {name, password, email} = req.body;

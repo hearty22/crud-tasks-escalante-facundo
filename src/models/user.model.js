@@ -1,5 +1,6 @@
 import { sequelize } from "../config/database.js";
 import { DataTypes } from "sequelize";
+import { task_model } from "./task.model.js";
 
 export const user_model =  sequelize.define(
     "user",{
@@ -23,4 +24,4 @@ export const user_model =  sequelize.define(
         }
 
     },{createdAt: false, updatedAt: false}
-)
+);

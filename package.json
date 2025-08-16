@@ -17,5 +17,11 @@
     "url": "https://github.com/hearty22/crud-tasks-escalante-facundo./issues"
   },
   "homepage": "https://github.com/hearty22/crud-tasks-escalante-facundo.#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3",
+    "sequelize": "^6.37.7"
+  }
 }

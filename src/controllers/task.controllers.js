@@ -1,6 +1,6 @@
 import { task_model } from "../models/task.model.js";
 import { user_model } from "../models/user.model.js";
-import { BOOLEAN, Op } from "sequelize";
+
 
 // ● POST /api/users: Crear un nuevo usuario.
 // ● GET /api/users: Obtener todos los usuarios.
@@ -10,15 +10,27 @@ import { BOOLEAN, Op } from "sequelize";
 
 export const Showtasks = async (req, res)=>{
     try {
-        const tasks = await task_model.findAll();
+        const tasks = await task_model.findAll({
+            attributes: {exclude: "user_id"},
+            include: {model: user_model, 
+            attributes: {exclude:["password", "email"]}}
+    })
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({error: "error al obtener las tareas"});
     };
+
 };
 export const Showtask = async (req, res)=>{
     try {
-        const task = await task_model.findByPk(req.params.id);
+        const task = await task_model.findByPk(req.params.id,
+            {
+                attributes:{exclude: ["user_id"]},
+                include:{model: user_model, 
+                    attributes: {exclude: ["password", "email"]}
+                }
+            }
+        );
         if (!task){
             return res.status(404).json({message: "la tarea no existe"})
         };
@@ -29,16 +41,30 @@ export const Showtask = async (req, res)=>{
         res.status(500).json({error: "error interno al obtener al usuario"})
     }
 };
+<<<<<<< .merge_file_vebxFL
+=======
+
+
+
+//post task
+>>>>>>> .merge_file_RlUa5S
 export const createTask = async (req, res)=>{
     try {
-        const {title, description, isComplete} = req.body;
+
+
+
+        const {title, description, isComplete, user_id} = req.body;
        
-        if (!title || !description){return res.status(400).json({message:"campos obligatorios no rellenados: title, description, isComplete"})}
+        if (!title || !description || !user_id){return res.status(400).json({message:"campos obligatorios no rellenados: title, description, isComplete, user_id"})}
         if(typeof isComplete !== "boolean"){return res.status(400).json({message:"el campo isComplete debe de ser un booleano"})}
+        if(typeof user_id !== "number"){return res.status(400).json({message: "el campo user_id debe de ser entero o number"})}
+
+        const user = await user_model.findByPk(user_id);
+        if(!user){res.status(400).json({message:"el usuario que desea asignarle la tarea no existe"})}
         
         const taskexist = await task_model.findOne({where:{title}});
         if (taskexist){return res.status(400).json({message:"La tarea que desea crear ya existe"})};
-        const newtask = new task_model({title, description, isComplete});
+        const newtask = new task_model({title, description, isComplete, user_id});
         await newtask.save();
         res.status(201).json(newtask);
     } catch (error) {
@@ -46,6 +72,8 @@ export const createTask = async (req, res)=>{
         res.status(500).json({error:"error interno al crear la tarea"});
     }
 };
+
+
 export const updateTask = async (req, res)=>{
     try {
         const {title, description , isComplete} = req.body;
