@@ -41,13 +41,7 @@ export const Showtask = async (req, res)=>{
         res.status(500).json({error: "error interno al obtener al usuario"})
     }
 };
-<<<<<<< .merge_file_vebxFL
-=======
 
-
-
-//post task
->>>>>>> .merge_file_RlUa5S
 export const createTask = async (req, res)=>{
     try {
 
