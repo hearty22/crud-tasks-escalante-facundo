@@ -1,6 +1,6 @@
 import { task_model } from "../models/task.model.js";
 import { user_model } from "../models/user.model.js";
-import { BOOLEAN, Op } from "sequelize";
+
 
 // ● POST /api/users: Crear un nuevo usuario.
 // ● GET /api/users: Obtener todos los usuarios.
@@ -10,12 +10,11 @@ import { BOOLEAN, Op } from "sequelize";
 
 export const Showtasks = async (req, res)=>{
     try {
-        const tasks = await task_model.findAll(
-            {attributes:{exclude: ["user_id"],
-                include:[{model: user_model}]
-            },
-            
-         });
+        const tasks = await task_model.findAll({
+            attributes: {exclude: "user_id"},
+            include: {model: user_model, 
+            attributes: {exclude:["password", "email"]}}
+    })
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({error: "error al obtener las tareas"});
@@ -44,7 +43,7 @@ export const Showtask = async (req, res)=>{
 
 
 
-
+//post task
 export const createTask = async (req, res)=>{
     try {
 
