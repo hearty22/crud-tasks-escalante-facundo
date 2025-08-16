@@ -29,7 +29,14 @@ export const Showtasks = async (req, res)=>{
 
 export const Showtask = async (req, res)=>{
     try {
-        const task = await task_model.findByPk(req.params.id);
+        const task = await task_model.findByPk(req.params.id,
+            {
+                attributes:{exclude: ["user_id"]},
+                include:{model: user_model, 
+                    attributes: {exclude: ["password", "email"]}
+                }
+            }
+        );
         if (!task){
             return res.status(404).json({message: "la tarea no existe"})
         };
