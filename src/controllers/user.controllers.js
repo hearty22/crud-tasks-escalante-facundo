@@ -1,5 +1,5 @@
-import { task_model } from "../models/task.model.js";
-import { user_model } from "../models/user.model.js";
+import { taskModel } from "../models/task.model.js";
+import { userModel } from "../models/user.model.js";
 import { Op } from "sequelize";
 
 // ● POST /api/users: Crear un nuevo usuario.
@@ -10,7 +10,7 @@ import { Op } from "sequelize";
 
 export const Showusers = async (req, res)=>{
     try {
-        const users = await user_model.findAll({include:{model: task_model,
+        const users = await userModel.findAll({include:{model: taskModel,
             attributes:{exclude:["user_id"]}
         }});
         res.status(200).json(users);
@@ -22,9 +22,9 @@ export const Showusers = async (req, res)=>{
 
 export const Showuser = async (req, res)=>{
     try {
-        const user = await user_model.findByPk(req.params.id,
+        const user = await userModel.findByPk(req.params.id,
             {
-                include:{model: task_model,
+                include:{model: taskModel,
                     attributes:{
                         exclude: ["user_id"]}
                 }
@@ -44,9 +44,9 @@ export const createUser = async (req, res)=>{
     try {
         const {name, password, email} = req.body;
         if (!name || !password || !email){return res.status(400).json({message:"campos obligatorios no rellenados: name, password, email"})}
-        const emailexist = await user_model.findOne({where:{email}});
+        const emailexist = await userModel.findOne({where:{email}});
         if (emailexist){return res.status(400).json({message:"el gmail ingresado ya está asociado a la pagina"})};
-        const newuser = new user_model({name, password, email});
+        const newuser = new userModel({name, password, email});
         await newuser.save();
         res.status(201).json(newuser);
     } catch (error) {
@@ -57,10 +57,10 @@ export const updateUser = async (req, res)=>{
     try {
         const {name, email , password} = req.body;
         if (!name && !password && !email){return res.status(400).json({message:"la solicitud debe tener rellenada al menos un campo"})};
-        const user = await user_model.findByPk(req.params.id);
+        const user = await userModel.findByPk(req.params.id);
         if(!user){return res.status(400).json({message:"el usuario que desea actualizar no existe"})};
         
-        const existingemail = await user_model.findOne({where:{email, id: {[Op.ne]:req.params.id}}});
+        const existingemail = await userModel.findOne({where:{email, id: {[Op.ne]:req.params.id}}});
         if(existingemail){return res.status(400).json({message:" el email ingresado ya existe"})};
         await user.update({name, email, password});
         res.status(200).json(user);
@@ -70,7 +70,7 @@ export const updateUser = async (req, res)=>{
 };
 export const delUser = async (req, res)=>{
     try {
-        const user = await user_model.findByPk(req.params.id);
+        const user = await userModel.findByPk(req.params.id);
         if(!user){return res.status(404).json({message:"el usuario que desea eliminar no existe"})};
         const {name, password, email} = user;
 
