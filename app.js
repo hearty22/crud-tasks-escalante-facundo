@@ -12,6 +12,7 @@ import { taskRouter } from "./src/routes/task.routes.js";
 import { db } from "./src/config/db.js";
 import personRouter from "./src/routes/person.routes.js";
 import tagRouter from "./src/routes/tag.routes.js";
+import tagTaskRouter from "./src/routes/tagTask.routes.js";
 
 configDotenv();
 const port = process.env.SERVER_PORT;
@@ -23,6 +24,7 @@ app.use("/api", personRouter)
 app.use("/api", userRouter);
 app.use("/api", taskRouter);
 app.use("/api", tagRouter );
+app.use("/api", tagTaskRouter);
 
 app.listen(port,()=>{
     db()

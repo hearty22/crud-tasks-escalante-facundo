@@ -8,5 +8,8 @@ export const tagTaskModel = sequelize.define("tag_task",{
 },{timestamps: false})
 
 
-taskModel.belongsToMany(tagModel,{through: "tag_task"})
-tagModel.belongsToMany(taskModel, {through: "tag_task"})
+taskModel.belongsToMany(tagModel,{through: "tag_task", foreignKey:"task_id"})
+tagModel.belongsToMany(taskModel, {through: "tag_task", foreignKey:"tag_id"})
+
+tagTaskModel.belongsTo(taskModel, {foreignKey: "task_id"});
+tagTaskModel.belongsTo(tagModel, {foreignKey: "tag_id"});
