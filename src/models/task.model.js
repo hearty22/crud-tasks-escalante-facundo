@@ -1,9 +1,9 @@
 import { sequelize } from "../config/database.js";
 import { DataTypes } from "sequelize";
-import { user_model } from "./user.model.js";
+import { userModel } from "./user.model.js";
 
 
-export const task_model = sequelize.define("task",
+export const taskModel = sequelize.define("task",
     {
         id:{
             type: DataTypes.INTEGER,
@@ -19,12 +19,12 @@ export const task_model = sequelize.define("task",
             type:DataTypes.STRING(100),
             allowNull: false
         },
-        isComplete:{
+        is_complete:{
             type: DataTypes.BOOLEAN,
             defaultValue: false
         }
     },{createdAt:false, updatedAt:false}
 );
 
-user_model.hasMany(task_model, {foreignKey: "user_id"});
-task_model.belongsTo(user_model, {foreignKey: "user_id"});
+userModel.hasMany(taskModel, {foreignKey: "user_id"});
+taskModel.belongsTo(userModel, {foreignKey: "user_id"});

@@ -1,8 +1,9 @@
 import { sequelize } from "../config/database.js";
 import { DataTypes } from "sequelize";
-import { task_model } from "./task.model.js";
+import { taskModel } from "./task.model.js";
+import { personModel } from "./person.model.js";
 
-export const user_model =  sequelize.define(
+export const userModel =  sequelize.define(
     "user",{
         id:{
             type: DataTypes.INTEGER,
@@ -25,3 +26,5 @@ export const user_model =  sequelize.define(
 
     },{createdAt: false, updatedAt: false}
 );
+personModel.hasOne(userModel,{foreignKey:"person_id"});
+userModel.belongsTo(personModel, {foreignKey: "person_id"});

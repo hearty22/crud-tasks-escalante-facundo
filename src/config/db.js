@@ -7,7 +7,7 @@ import { sequelize } from "./database.js";
 
 export const db = async ()=>{ 
     try {
-        await sequelize.sync({force: false, alter: false})
+        await sequelize.sync({force: true, alter: false})
         console.log("servidor conectado a la base de datos");
     } catch (error) {
         console.error("error al conectar con la base de datos:", error);

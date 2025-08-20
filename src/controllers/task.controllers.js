@@ -1,5 +1,5 @@
-import { task_model } from "../models/task.model.js";
-import { user_model } from "../models/user.model.js";
+import { taskModel } from "../models/task.model.js";
+import { userModel } from "../models/user.model.js";
 
 
 // ● POST /api/users: Crear un nuevo usuario.
@@ -10,9 +10,9 @@ import { user_model } from "../models/user.model.js";
 
 export const Showtasks = async (req, res)=>{
     try {
-        const tasks = await task_model.findAll({
+        const tasks = await taskModel.findAll({
             attributes: {exclude: "user_id"},
-            include: {model: user_model, 
+            include: {model: userModel, 
             attributes: {exclude:["password", "email"]}}
     })
         res.status(200).json(tasks);
@@ -23,7 +23,7 @@ export const Showtasks = async (req, res)=>{
 };
 export const Showtask = async (req, res)=>{
     try {
-        const task = await task_model.findByPk(req.params.id,
+        const task = await taskModel.findByPk(req.params.id,
             {
                 attributes:{exclude: ["user_id"]},
                 include:{model: user_model, 
@@ -53,10 +53,10 @@ export const createTask = async (req, res)=>{
         if(typeof isComplete !== "boolean"){return res.status(400).json({message:"el campo isComplete debe de ser un booleano"})}
         if(typeof user_id !== "number"){return res.status(400).json({message: "el campo user_id debe de ser entero o number"})}
 
-        const user = await user_model.findByPk(user_id);
+        const user = await userModel.findByPk(user_id);
         if(!user){res.status(400).json({message:"el usuario que desea asignarle la tarea no existe"})}
         
-        const taskexist = await task_model.findOne({where:{title}});
+        const taskexist = await userModel.findOne({where:{title}});
         if (taskexist){return res.status(400).json({message:"La tarea que desea crear ya existe"})};
         const newtask = new task_model({title, description, isComplete, user_id});
         await newtask.save();
@@ -73,11 +73,11 @@ export const updateTask = async (req, res)=>{
         const {title, description , isComplete} = req.body;
 
         if (!title && !description ){return res.status(400).json({message:"la solicitud debe tener rellenada al menos un campo"})};
-        const task = await task_model.findByPk(req.params.id);
+        const task = await taskModel.findByPk(req.params.id);
         if(!task){return res.status(400).json({message:"el usuario que desea actualizar no existe"})};
         if(typeof isComplete !== "boolean"){return res.status(400).json({message:"el campo isComplete debe de ser un booleano"})}
 
-        const existingtitle = await task_model.findOne({where:{title, id: {[Op.ne]:req.params.id}}});
+        const existingtitle = await taskModel.findOne({where:{title, id: {[Op.ne]:req.params.id}}});
         if(existingtitle){return res.status(400).json({message:"Ya existe una tarea con el mismo titulo"})};
         await task.update({title, description, isComplete});
         res.status(200).json(task);
@@ -87,7 +87,7 @@ export const updateTask = async (req, res)=>{
 };
 export const delTask = async (req, res)=>{
     try {
-        const task = await task_model.findByPk(req.params.id);
+        const task = await taskModel.findByPk(req.params.id);
         if(!task){return res.status(404).json({message:"la tarea que desea eliminar no existe"})};
         const {title, description} = task;
 
