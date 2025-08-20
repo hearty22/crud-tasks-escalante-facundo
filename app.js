@@ -6,10 +6,12 @@ import "./src/models/person.model.js";
 import "./src/models/tag.model.js";
 import "./src/models/tagTask.model.js"
 import "./src/config/db.js";
+
 import {userRouter} from "./src/routes/user.routes.js";
 import { taskRouter } from "./src/routes/task.routes.js";
 import { db } from "./src/config/db.js";
 import personRouter from "./src/routes/person.routes.js";
+import tagRouter from "./src/routes/tag.routes.js";
 
 configDotenv();
 const port = process.env.SERVER_PORT;
@@ -20,6 +22,7 @@ app.use(express.json());
 app.use("/api", personRouter)
 app.use("/api", userRouter);
 app.use("/api", taskRouter);
+app.use("/api", tagRouter );
 
 app.listen(port,()=>{
     db()

@@ -1,5 +1,4 @@
 import { personModel } from "../models/person.model.js";
-import { json, Op } from "sequelize";
 import { userModel } from "../models/user.model.js";
 import { taskModel } from "../models/task.model.js";
 
