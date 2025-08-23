@@ -26,5 +26,5 @@ export const userModel =  sequelize.define(
 
     },{createdAt: false, updatedAt: false}
 );
-personModel.hasOne(userModel,{foreignKey:"person_id", onDelete: "CASCADE"});
-userModel.belongsTo(personModel, {foreignKey: "person_id", onDelete: "CASCADE"});
+personModel.hasOne(userModel,{foreignKey:"person_id"});
+userModel.belongsTo(personModel, {foreignKey: "person_id"});
