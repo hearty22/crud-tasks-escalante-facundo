@@ -1,6 +1,8 @@
 import { personModel } from "../models/person.model.js";
 import { userModel } from "../models/user.model.js";
 import { taskModel } from "../models/task.model.js";
+import { where } from "sequelize";
+import { delUser } from "./user.controllers.js";
 
 //GET
 export const getPeople = async (req, res)=>{
@@ -79,12 +81,18 @@ export const updatePerson = async (req, res)=>{
 //DEL
 export const delPerson = async (req, res)=>{
     try {
+
         const person = await personModel.findByPk(req.params.id);
+        console.log(person)
         if(!person){
             return res.status(404).json({message:"la persona que desea eliminar no existe"});
         };
-        const {firstname, lastname, user_id} = person;
-        person.destroy();
+        
+        const {firstname, lastname} = person;
+        const user = await userModel.findOne({where:{person_id:req.params.id}})
+        
+        await user.destroy();
+        await person.destroy();
         res.status(200).json({message:`Persona eliminada con exito: ${firstname}, ${lastname}`})
 
     } catch (error) {

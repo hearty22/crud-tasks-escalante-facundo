@@ -4,4 +4,4 @@ import { DataTypes } from "sequelize";
 export const personModel = sequelize.define("people",{
     firstname:{type: DataTypes.STRING, allowNull: false},
     lastname:{type: DataTypes.STRING, allowNull: false}
-}, { timestamps: false})
+}, { createdAt: false, updatedAt: false, paranoid: true})
